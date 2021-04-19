@@ -1,4 +1,4 @@
-// g++ -Istk/include/ -Lstk/src/ -D__MACOSX_CORE__ main.cpp -lstk -lpthread -framework CoreAudio -framework CoreMIDI -framework CoreFoundation
+// g++ -o fingersynth -Istk/include/ -Lstk/src/ -D__MACOSX_CORE__ main.cpp -lstk -lncurses -lpthread -framework CoreAudio -framework CoreMIDI -framework CoreFoundation
 #include "SineWave.h"
 #include "RtWvOut.h"
 #include "Envelope.h"
@@ -21,7 +21,7 @@
 #include <BlitSaw.h>
 #include <BlitSquare.h>
 #include <fstream>
-// #include "./include/print.h"
+
 
 using namespace stk;
 using namespace std;
@@ -33,6 +33,7 @@ int minor_scale[12] = {0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19};
 int major_pentatonic[12] = {0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26};
 int minor_pentatonic[12] = {0, 3, 5, 7, 10, 12, 15, 17, 19, 22, 24, 27};
 int minor_blues[12] = {0, 3, 5, 6, 7, 10, 12, 15, 17, 18, 19, 22};
+int chromatic[12] = {0,1,2,3,4,5,6,7,8,9,10,11};
 int scale[12] = {};
 
 int change = 0; // Variable that indicates if a change in any of the device settings was made
@@ -43,7 +44,7 @@ int num_options = 4;
 int base_note = 57;        // Variable defining the base note
 int scale_number = 0;      // Variable defining the Scape type used. Default: Major
 int oscillator_number = 0; // Variable defining the name of the oscillator used. Default: SineWave
-char scale_names[5][20] = {"Major", "Minor", "Maj Pen", "Min Pen", "Min Blu"};
+char scale_names[6][20] = {"Major", "Minor", "Maj Pen", "Min Pen", "Min Blu", "Chrom"};
 char oscillators[3][20] = {"Sine", "Sawth", "Square"};
 int yMax, xMax;
 int column_width;
@@ -224,7 +225,7 @@ int change_scale(int i, int j, WINDOW *w)
         {
         case (char)KEY_RIGHT:
             current_scale++;
-            if (current_scale > 4)
+            if (current_scale > 5)
             {
                 current_scale = 0;
             }
@@ -233,7 +234,7 @@ int change_scale(int i, int j, WINDOW *w)
             current_scale--;
             if (current_scale < 0)
             {
-                current_scale = 4;
+                current_scale = 5;
             }
             break;
         }
@@ -261,6 +262,9 @@ int change_scale(int i, int j, WINDOW *w)
         break;
     case 4:
         memcpy(scale, minor_blues, sizeof(scale));
+        break;
+    case 5:
+        memcpy(scale, chromatic, sizeof(scale));
         break;
     }
     wattroff(w, A_STANDOUT);
@@ -572,7 +576,7 @@ int main()
             val = (int)message[2];
             if (mes == 1)
             {
-                note = val / 11;
+                note = floor(((float) val) / (10.59));
                 if (old_note < 0)
                 {
                     envs[note].keyOn();
