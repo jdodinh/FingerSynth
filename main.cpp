@@ -43,10 +43,11 @@ int num_options = 4;
 int base_note = 57;        // Variable defining the base note
 int scale_number = 0;      // Variable defining the Scape type used. Default: Major
 int oscillator_number = 0; // Variable defining the name of the oscillator used. Default: SineWave
-char scale_names[5][20] = {"Maj", "Min", "Ma P", "Mi P", "Mi Bl"};
-char oscillators[3][20] = {"Sine", "Saw", "Sqr"};
+char scale_names[5][20] = {"Major", "Minor", "Maj Pen", "Min Pen", "Min Blu"};
+char oscillators[3][20] = {"Sine", "Sawth", "Square"};
 int yMax, xMax;
 int column_width;
+const int text_width = 48;
 
 bool done;
 
@@ -62,7 +63,7 @@ float note_to_freq(int note_num)
 
 int print_logo(int logo_num, int column_width, WINDOW *w, bool highlight)
 {
-    char line[30];
+    char line[text_width];
     ifstream inFile;
     std::string str;
     int j;
@@ -95,7 +96,7 @@ int print_logo(int logo_num, int column_width, WINDOW *w, bool highlight)
     {
         sprintf(line, "%-7s", "                              ");
         sprintf(line, "%-7s", str.c_str());
-        mvwprintw(w, j, logo_num * column_width + (column_width - 30) / 2, "%s", line);
+        mvwprintw(w, j, logo_num * column_width + (column_width - text_width) / 2, "%s", line);
         j++;
     }
     wattroff(w, A_STANDOUT);
@@ -104,8 +105,8 @@ int print_logo(int logo_num, int column_width, WINDOW *w, bool highlight)
 
 int print_value(int value_num, int val, int column_width, WINDOW *w, bool highlight)
 {
-    char line[30];
-    char blank[30] = "                             ";
+    char line[text_width];
+    char blank[text_width] = "                                               ";
     char command[256];
     int j;
     std::string str;
@@ -115,7 +116,7 @@ int print_value(int value_num, int val, int column_width, WINDOW *w, bool highli
     {
         if (val >= 0)
         {
-            sprintf(command, "figlet -w 30 -d ~/Documents/perso/Fonts/ -f slant '%d' > ~/Dropbox/9\\ -\\ WINTER\\ 2021/MUMT\\ 307/Final\\ Project/logos/note_num.txt", val);
+            sprintf(command, "figlet -w 48 -d ./logos/fonts/ -f slant '%d' > ./logos/note_num.txt", val);
             system(command);
         }
         inFile.open("./logos/note_num.txt");
@@ -124,7 +125,7 @@ int print_value(int value_num, int val, int column_width, WINDOW *w, bool highli
     {
         if (val >= 0)
         {
-            sprintf(command, "figlet -w 30 -d ~/Documents/perso/Fonts/ -f slant '%s' > ~/Dropbox/9\\ -\\ WINTER\\ 2021/MUMT\\ 307/Final\\ Project/logos/scale_name.txt", scale_names[val]);
+            sprintf(command, "figlet -w 48 -d ./logos/fonts/ -f slant '%s' > ./logos/scale_name.txt", scale_names[val]);
             system(command);
         }
         inFile.open("./logos/scale_name.txt");
@@ -133,7 +134,7 @@ int print_value(int value_num, int val, int column_width, WINDOW *w, bool highli
     {
         if (val >= 0)
         {
-            sprintf(command, "figlet -w 30 -d ~/Documents/perso/Fonts/ -f slant '%s' > ~/Dropbox/9\\ -\\ WINTER\\ 2021/MUMT\\ 307/Final\\ Project/logos/osc_name.txt", oscillators[val]);
+            sprintf(command, "figlet -w 48 -d ./logos/fonts/ -f slant '%s' > ./logos/osc_name.txt", oscillators[val]);
             system(command);
         }
         inFile.open("./logos/osc_name.txt");
@@ -142,7 +143,7 @@ int print_value(int value_num, int val, int column_width, WINDOW *w, bool highli
     {
         if (val >= 0)
         {
-            sprintf(command, "figlet -w 30 -d ~/Documents/perso/Fonts/ -f slant '%s' > ~/Dropbox/9\\ -\\ WINTER\\ 2021/MUMT\\ 307/Final\\ Project/logos/osc_name.txt", oscillators[val]);
+            sprintf(command, "figlet -w 48 -d ./logos/fonts/ -f slant '%s' > ./logos/osc_name.txt", oscillators[val]);
             system(command);
         }
         inFile.open("./logos/filter_name.txt");
@@ -162,16 +163,16 @@ int print_value(int value_num, int val, int column_width, WINDOW *w, bool highli
         if (highlight)
         {
             wattroff(w, A_STANDOUT);
-            mvwprintw(w, j, value_num * column_width + (column_width - 30) / 2, "%s", blank);
+            mvwprintw(w, j, value_num * column_width + (column_width - text_width) / 2, "%s", blank);
             wattron(w, A_STANDOUT);
         }
         else
         {
-            mvwprintw(w, j, value_num * column_width + (column_width - 30) / 2, "%s", blank);
+            mvwprintw(w, j, value_num * column_width + (column_width - text_width) / 2, "%s", blank);
         }
-
+        mvwprintw(w, j, value_num * column_width + (column_width - text_width) / 2 , "%s", blank);
         sprintf(line, "%-7s", str.c_str());
-        mvwprintw(w, j, value_num * column_width + (column_width - 30) / 2 + (30 - str.length()) / 2, "%s", line);
+        mvwprintw(w, j, value_num * column_width + (column_width - text_width) / 2 + (text_width - str.length()) / 2, "%s", line);
         j++;
     }
     wattroff(w, A_STANDOUT);
@@ -202,13 +203,11 @@ int change_tonic(int i, int j, WINDOW *w)
                 current_note = 20;
             }
             break;
+        // case (char)KEY_UP:
+        //     return 0;
+        //     break;
         }
         print_value(i, current_note, column_width, w, true);
-        // wattroff(w, A_STANDOUT);
-        // mvwprintw( w, 6, 20 * i + 5, "                    ");
-        // sprintf(item, "%d", current_note);
-        // wattron(w, A_STANDOUT);
-        // mvwprintw( w, 6, 20 * i + 5, "%s", item);
     }
     base_note = current_note;
     wattroff(w, A_STANDOUT);
@@ -306,9 +305,9 @@ int change_oscillator(int i, int j, WINDOW *w)
 void menu_loop()
 {
 
-    system("figlet -w 30 -d ~/Documents/perso/Fonts/ -f slant '57' > ~/Dropbox/9\\ -\\ WINTER\\ 2021/MUMT\\ 307/Final\\ Project/logos/note_num.txt");
-    system("figlet -w 30 -d ~/Documents/perso/Fonts/ -f slant Maj > ~/Dropbox/9\\ -\\ WINTER\\ 2021/MUMT\\ 307/Final\\ Project/logos/scale_name.txt");
-    system("figlet -w 30 -d ~/Documents/perso/Fonts/ -f slant Sine > ~/Dropbox/9\\ -\\ WINTER\\ 2021/MUMT\\ 307/Final\\ Project/logos/osc_name.txt");
+    system("figlet -w 48 -d ./logos/fonts/ -f slant '57' > ./logos/note_num.txt");
+    system("figlet -w 48 -d ./logos/fonts/ -f slant Major > ./logos/scale_name.txt");
+    system("figlet -w 48 -d ./logos/fonts/ -f slant Sine > ./logos/osc_name.txt");
 
     char item[20], ch, line[100];
     std::string str;
@@ -334,7 +333,7 @@ void menu_loop()
     column_width = width / 4;
     // Create window for input
     WINDOW *w;
-    w = newwin(yMax - 4, xMax - 10, 2, 5);
+    w = newwin(yMax/2, xMax - 10, 2, 5);
     box(w, 0, 0);
     j = 2;
 
