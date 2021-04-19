@@ -59,3 +59,14 @@ The central functionality of the menu is to adjust the variables (shared with th
 ## Areas for further Research and Development
 
 While the project at the moment provides a very well rounded synthesizer with a lot of functionalities and possibilities, it is important to note that there are certain aspects that I wish to be able to explore more and for which I unfortunately didn't have the time to develop in enough depth. The main function of course is the addition of filters and effects to the synthesized sounds. When I initially started out on the project I envisioned the menu containing the filter/effect element, which allows for the choice from a variety of options, and the possibility to adjust the given filter/effect parameters. While the current menu reflects the desire to do so, for now it is purely visual, and unfortunately the synthesizer doesn't incorporate any possibility right now to create filtered sounds. 
+
+Another element is the capability of blending multiple harmonics to create sounds of different timbres and evoke different effects. As it can be seen, the choice for the oscillators remains quite limited, and I would have liked to be able to be able to blend different frequencies based on the characteristics of certain real sounds.
+
+Additionally, some other controls could be added to the user with regards to overall gain, and more. 
+
+While those are only a few ideas for improvement, I am certain that there are many more features that can be incorporated, to make this small synthesizer better. 
+
+## Conclusion
+
+To conclude the synthesizer combines an intuitive and a fun to use instrument which allows the user to customize their desired outputs and sounds. It incorporates elements of topics learnt in MUMT 307 throughout the semester, with the use of the Synthesis TookKit being central to the generation of the sound. It was a truly rewarding experience when I managed to play some sounds, and given the scale selection it can actually be incredibly easy to make FingerSynth sound relatively good. I have to say that I didn't expect that playing around with FingerSynth, and jamming along to some tracks would be such a good fun break activity while going about a work filled day spent in a library. I hope to be able to develop the project further based on my desired areas of improvement, as well as external feedback/constructive criticism.
+
