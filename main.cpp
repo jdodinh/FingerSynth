@@ -468,13 +468,16 @@ int main()
     echo.setMaximumDelay(500);
     Envelope envs[12];
     Envelope env;
-    Envelope velo_env;
+    Envelope velo_env1;
+    Envelope velo_env2;
     memcpy(scale, major_scale, sizeof(minor_pentatonic));
 
     env.setTime(0.01);
-    velo_env.setTime(0.01);
+    velo_env1.setTime(0.01);
+    velo_env2.setTime(0.01);
     env.keyOff();
-    velo_env.keyOff();
+    velo_env1.keyOff();
+    velo_env2.keyOff();
     int env1_state = 1;
     for (int i = 0; i < 12; i++)
     {
@@ -590,15 +593,22 @@ int main()
             }
             else if (mes == 2)
             {
-                velocity = (double)val;
-                if (old_velo < 0)
+                velocity = (double)val/8.0;
+                if (old_velo < 0.0)
                 {
-                    velo_env.keyOn();
+                    velo_env1.keyOn();
                 }
                 else if (velocity != old_velo)
                 {
-                    velo_env.keyOff();
-                    velo_env.keyOn();
+                    if (velo_env1.lastOut() == 1) {
+                        velo_env1.keyOff();
+                        velo_env2.keyOn();
+                    }
+                    else {
+                        velo_env2.keyOff();
+                        velo_env1.keyOn();
+                    }
+                    
                 }
                 old_velo = velocity;
             }
@@ -629,18 +639,18 @@ int main()
         case 1:
             for (i = 0; i < 12; i++)
             {
-                sample += sawtooth[i].tick() * envs[i].tick();
+                sample += 0.5 * sawtooth[i].tick() * envs[i].tick();
             }
             break;
         case 2:
             for (i = 0; i < 12; i++)
             {
-                sample += square[i].tick() * envs[i].tick();
+                sample +=  0.5 * square[i].tick() * envs[i].tick();
             }
             break;
         }
 
-        sample = sample * env.tick() * (velocity * velo_env.tick()) / 128.0;
+        sample = sample * env.tick() * (velocity * (velo_env1.tick()+velo_env2.tick())) / 16.0;
         dac.tick(sample);
     }
 
