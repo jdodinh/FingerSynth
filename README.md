@@ -66,6 +66,9 @@ Additionally, some other controls could be added to the user with regards to ove
 
 While those are only a few ideas for improvement, I am certain that there are many more features that can be incorporated, to make this small synthesizer better. 
 
+## Demonstration
+Please find the demonstration [here](https://youtu.be/iuopwQqIxbo).
+
 ## Conclusion
 
 To conclude the synthesizer combines an intuitive and a fun to use instrument which allows the user to customize their desired outputs and sounds. It incorporates elements of topics learnt in MUMT 307 throughout the semester, with the use of the Synthesis TookKit being central to the generation of the sound. It was a truly rewarding experience when I managed to play some sounds, and given the scale selection it can actually be incredibly easy to make FingerSynth sound relatively good. I have to say that I didn't expect that playing around with FingerSynth, and jamming along to some tracks would be such a good fun break activity while going about a work filled day spent in a library. I hope to be able to develop the project further based on my desired areas of improvement, as well as external feedback/constructive criticism.
