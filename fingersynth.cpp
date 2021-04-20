@@ -64,6 +64,7 @@ float note_to_freq(int note_num)
 
 int print_logo(int logo_num, int column_width, WINDOW *w, bool highlight)
 {
+    /* Helper function that prints fonts to the screen */
     char line[text_width];
     ifstream inFile;
     std::string str;
@@ -106,6 +107,7 @@ int print_logo(int logo_num, int column_width, WINDOW *w, bool highlight)
 
 int print_value(int value_num, int val, int column_width, WINDOW *w, bool highlight)
 {
+    /* Helper function that prints fonts to the screen */
     char line[text_width];
     char blank[text_width] = "                                               ";
     char command[256];
@@ -204,9 +206,6 @@ int change_tonic(int i, int j, WINDOW *w)
                 current_note = 20;
             }
             break;
-        // case (char)KEY_UP:
-        //     return 0;
-        //     break;
         }
         print_value(i, current_note, column_width, w, true);
     }
@@ -217,6 +216,8 @@ int change_tonic(int i, int j, WINDOW *w)
 
 int change_scale(int i, int j, WINDOW *w)
 {
+    /* Helper function that allows the menu choice of a different scale note, 
+    and changes that scale once the user presses enter */
     int current_scale = scale_number;
     char item[20], ch;
     while ((ch = wgetch(w)) != 10)
@@ -239,11 +240,6 @@ int change_scale(int i, int j, WINDOW *w)
             break;
         }
         print_value(i, current_scale, column_width, w, true);
-        // wattroff(w, A_STANDOUT);
-        // mvwprintw( w, 6, 20 * i + 5, "                    ");
-        // sprintf(item, "%-7s", scale_names[current_scale]);
-        // wattron(w, A_STANDOUT);
-        // mvwprintw( w, 6, 20 * i + 5, "%s", item);
     }
     scale_number = current_scale;
     switch (scale_number)
@@ -273,6 +269,8 @@ int change_scale(int i, int j, WINDOW *w)
 
 int change_oscillator(int i, int j, WINDOW *w)
 {
+    /* Helper function that allows the menu choice of a oscillator base note, 
+    and changes that oscillator once the user presses enter */
     int current_oscillator = oscillator_number;
     char item[20], ch;
     while ((ch = wgetch(w)) != 10)
@@ -295,11 +293,6 @@ int change_oscillator(int i, int j, WINDOW *w)
             break;
         }
         print_value(i, current_oscillator, column_width, w, true);
-        // wattroff(w, A_STANDOUT);
-        // mvwprintw( w, 6, 20 * i + 5, "                    ");
-        // sprintf(item, "%-7s", oscillators[current_oscillator]);
-        // wattron(w, A_STANDOUT);
-        // mvwprintw( w, 6, 20 * i + 5, "%s", item);
     }
     oscillator_number = current_oscillator;
     wattroff(w, A_STANDOUT);
@@ -321,16 +314,14 @@ void menu_loop()
 
     int i = 0;
     int j = 0;
-    int z = 0;
     int width, height;
-    /* INIT NCURSES */
     char list[5][20] = {"One", "Two", "Three", "Four", "Five"};
     bool highlight = false;
 
-    // Get screen size
+    /* INIT NCURSES */
     initscr();
+    // Get screen size
     getmaxyx(stdscr, yMax, xMax);
-    cout << xMax << endl;
 
     width = xMax - 10;
     height = yMax - 4;
@@ -340,10 +331,11 @@ void menu_loop()
     w = newwin(yMax/2, xMax - 10, 2, 5);
     box(w, 0, 0);
     j = 2;
-
     noecho();
     ifstream inFile;
     inFile.open("logos/main_logo.txt");
+
+    // Print the main logo
     while (getline(inFile, str))
     {
         sprintf(line, "%-7s", str.c_str());
@@ -353,6 +345,7 @@ void menu_loop()
     inFile.close();
     wrefresh(w);
 
+    // Print the menu options
     j = 10;
     for (i = 0; i < num_options; i++)
     {
@@ -374,6 +367,7 @@ void menu_loop()
     i = 0;
     j = 0;
 
+    // Loop responsible for user input and readjusting parameters. 
     while ((ch = wgetch(w)) != 113)
     {
         print_logo(i, column_width, w, false);
@@ -505,7 +499,6 @@ int main()
 
     thread main_menu(menu_loop);
 
-    // cout << "Enter a key number" << endl;
     try
     {
         midiin = new RtMidiIn();
@@ -520,7 +513,6 @@ int main()
     for (i = 0; i < nPorts; i++)
     {
         port_name = midiin->getPortName(i);
-        // cout << port_name << endl;
         if (port_name == "AudioSwift 3")
         {
             port = i;
@@ -530,7 +522,6 @@ int main()
     try
     {
         port_name = midiin->getPortName(port);
-        // cout << port_name << endl;
         midiin->openPort(port);
     }
     catch (RtMidiError &error)
@@ -553,7 +544,6 @@ int main()
 
     while (!done)
     {
-
         if (change == 1)
         {
             for (int i = 0; i < 12; i++)
@@ -569,12 +559,8 @@ int main()
         sample = 0.0;
         stamp = midiin->getMessage(&message);
         nBytes = message.size();
-        // for (i = 0; i<nBytes; i++) {
-        //     cout << (int) message[i] << " ";
-        // }
         if (nBytes > 0)
         {
-            // cout << endl;
             mes = (int)message[1];
             val = (int)message[2];
             if (mes == 1)
