@@ -1,4 +1,4 @@
-// g++ -o fingersynth -Istk/include/ -Lstk/src/ -D__MACOSX_CORE__ main.cpp -lstk -lncurses -lpthread -framework CoreAudio -framework CoreMIDI -framework CoreFoundation
+// g++ -o fingersynth -Istk/include/ -Lstk/src/ -D__MACOSX_CORE__ fingersynth.cpp -lstk -lncurses -lpthread -framework CoreAudio -framework CoreMIDI -framework CoreFoundation
 #include "SineWave.h"
 #include "RtWvOut.h"
 #include "Envelope.h"
